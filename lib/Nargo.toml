@@ -1,0 +1,8 @@
+[package]
+name = "template_composition"
+type = "lib"
+authors = ["Wonderland"]
+compiler_version = ">=1.0.0"
+
+[dependencies]
+aztec = { path = "../../aztec-nr/aztec" }

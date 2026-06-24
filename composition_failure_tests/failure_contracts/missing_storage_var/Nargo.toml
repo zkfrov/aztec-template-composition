@@ -1,0 +1,10 @@
+[package]
+name = "missing_storage_var"
+type = "contract"
+authors = ["Wonderland"]
+compiler_version = ">=1.0.0"
+
+[dependencies]
+aztec = { path = "../../../../aztec-nr/aztec" }
+template_composition = { path = "../../../lib" }
+composition_fixtures = { path = "../../../composition_tests/fixtures" }

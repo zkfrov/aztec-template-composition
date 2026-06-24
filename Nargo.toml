@@ -1,0 +1,10 @@
+[workspace]
+members = [
+  "lib",
+  "composition_tests/fixtures",
+  "composition_tests/host",
+  "composition_tests/multi",
+  "composition_tests/transitive",
+  "composition_tests/diamond_transitive",
+  "composition_tests/override",
+]
