@@ -5,6 +5,6 @@ authors = ["Wonderland"]
 compiler_version = ">=1.0.0"
 
 [dependencies]
-aztec = { path = "../../../aztec-nr/aztec" }
+aztec = { git = "https://github.com/defi-wonderland/aztec-nr", tag = "feat/macro-extensions", directory = "aztec" }
 template_composition = { path = "../../lib" }
 composition_fixtures = { path = "../fixtures" }
