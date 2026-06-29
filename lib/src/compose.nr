@@ -1,13 +1,13 @@
 //! The host-side attributes (`#[compose]`, `#[override_template]`, `#[override_internal_template]`)
-//! and the extension callback that performs the injection.
+//! and the hook callback that performs the injection.
 //!
 //! Each attribute is applied to the host contract *above* `#[aztec]`. They record the host's intent
-//! in per-module globals and register a single extension callback with aztec-nr. When `#[aztec]`
+//! in per-module globals and register a single hook with aztec-nr. When `#[aztec]`
 //! expands the host, the callback flattens the requested templates, validates overrides and
 //! collisions, injects the surviving functions (so they appear in dispatch/interface/ABI), and
 //! returns the pre-generated wrappers/ABI/events/library-methods to splice in.
 
-use aztec::macros::extensions::register_extension;
+use aztec::macros::pre_generation_hook::register_hook;
 use aztec::macros::internals_functions_generation::{external_functions_registry, internal_functions_registry};
 use aztec::utils::cmap::CHashMap;
 
@@ -18,7 +18,7 @@ use crate::validation;
 comptime mut global HOST_COMPOSED_KEYS: CHashMap<Module, [Field]> = CHashMap::new();
 comptime mut global HOST_OVERRIDES: CHashMap<Module, [(Field, Field)]> = CHashMap::new();
 comptime mut global HOST_INTERNAL_OVERRIDES: CHashMap<Module, [(Field, Field)]> = CHashMap::new();
-comptime mut global HOST_EXTENSION_REGISTERED: CHashMap<Module, bool> = CHashMap::new();
+comptime mut global HOST_HOOK_REGISTERED: CHashMap<Module, bool> = CHashMap::new();
 
 /// Composes the named template into the host (or into another template, enabling transitive use).
 pub comptime fn compose(m: Module, template_id: CtString) -> Quoted {
@@ -34,7 +34,7 @@ pub comptime fn compose(m: Module, template_id: CtString) -> Quoted {
         template_registry::register_template_composed_keys(self_key.unwrap(), updated);
     }
 
-    ensure_extension_registered(m);
+    ensure_hook_registered(m);
     quote {}
 }
 
@@ -46,7 +46,7 @@ pub comptime fn override_template(m: Module, template_id: CtString, function_nam
     template_registry::register_override_function_label(template_key, function_key, function_name);
 
     HOST_OVERRIDES.insert(m, HOST_OVERRIDES.get(m).unwrap_or(@[]).push_back((template_key, function_key)));
-    ensure_extension_registered(m);
+    ensure_hook_registered(m);
     quote {}
 }
 
@@ -61,14 +61,14 @@ pub comptime fn override_internal_template(m: Module, template_id: CtString, fun
         m,
         HOST_INTERNAL_OVERRIDES.get(m).unwrap_or(@[]).push_back((template_key, function_key)),
     );
-    ensure_extension_registered(m);
+    ensure_hook_registered(m);
     quote {}
 }
 
-comptime fn ensure_extension_registered(m: Module) {
-    if HOST_EXTENSION_REGISTERED.get(m).is_none() {
-        HOST_EXTENSION_REGISTERED.insert(m, true);
-        register_extension(m, inject_composed_templates);
+comptime fn ensure_hook_registered(m: Module) {
+    if HOST_HOOK_REGISTERED.get(m).is_none() {
+        HOST_HOOK_REGISTERED.insert(m, true);
+        register_hook(m, inject_composed_templates);
     }
 }
 

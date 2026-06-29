@@ -1,7 +1,7 @@
 //! Compile-time registry of pre-generated code for contract templates.
 //!
 //! Populated by `#[contract_template]` while the *template* crate is elaborated (where function
-//! bodies are available), and read by the compose extension while the *host* crate is elaborated.
+//! bodies are available), and read by the compose hook while the *host* crate is elaborated.
 //! Comptime globals are shared across a whole compilation, so the template crate (a dependency of
 //! the host) writes here and the host reads it.
 

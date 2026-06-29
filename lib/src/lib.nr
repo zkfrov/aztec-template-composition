@@ -1,10 +1,10 @@
-//! Contract template composition for Aztec, built as a consumer of the aztec-nr macro extension
-//! hook (`aztec::macros::extensions`).
+//! Contract template composition for Aztec, built as a consumer of the aztec-nr pre-generation
+//! hook (`aztec::macros::pre_generation_hook`).
 //!
 //! This crate provides the `#[contract_template]`, `#[compose]` (and override) attributes that let
 //! a host contract pull in functions from a separately-compiled template contract, *without any
-//! template-specific code living in aztec-nr*. It works purely through the public extension API:
-//! `register_extension`, the `add_injected_*` registries, and the wrapper generators.
+//! template-specific code living in aztec-nr*. It works purely through the public hook API:
+//! `register_hook`, the `add_injected_*` registries, and the wrapper generators.
 
 pub mod template_registry;
 pub mod codegen;

@@ -1,10 +1,10 @@
 # aztec-template-composition
 
 Contract template composition for Aztec, implemented **entirely out-of-tree** as a consumer of the
-generic macro-extension hook added to aztec-nr on the `feat/macro-extensions` branch.
+pre-generation hook added to aztec-nr on the `feat/pre-generation-hook` branch.
 
 No template-specific code lives in aztec-nr. This crate plugs into `#[aztec]` purely through the
-public extension API (`aztec::macros::extensions::register_extension`, the `add_injected_*`
+public hook API (`aztec::macros::pre_generation_hook::register_hook`, the `add_injected_*`
 registries, and the wrapper generators).
 
 ## Usage
